@@ -2,7 +2,7 @@ import requests
 import time
 
 Zokon_puuid = "DbjcFQpoiF_-F6FriNwcW2eLOMUwvpatv2if1W3JnEq3DZiYfylB9bzpzTuTVSIXHndatE0ag7Ecow"
-api_key = 'RGAPI-b64bbc10-0dc3-420e-8662-8554fb1c4665'
+api_key = '<<<<API_KEY_HERE>>>>'
 
 def get_kdas():
     number_of_games = 5

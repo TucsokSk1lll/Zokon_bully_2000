@@ -1,0 +1,1 @@
+Zokon_game_info()
