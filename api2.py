@@ -10,9 +10,10 @@ def Find_info_about_zokon(game_id,game_index):
     Zokon_and_opponent_gold = {'Zokon':None,'Zokon_opponent':None}
     Zokon_and_opponent_level = {'Zokon':None,'Zokon_opponent':None}
     Zokon_vision = {'Zokon':None}
+    Win_or_lose = {'Zokon':None}
     
     Infos = {'game_index':game_index,'gameid':game_id,'Zokon_and_opponent_champ':Zokon_and_opponent_champ,'Zokon_kills_and_deaths':Zokon_kills_and_deaths,'Zokon_and_opponent_gold':Zokon_and_opponent_gold,
-             'Zokon_and_opponent_level':Zokon_and_opponent_level,'Zokon_vision':Zokon_vision}
+             'Zokon_and_opponent_level':Zokon_and_opponent_level,'Zokon_vision':Zokon_vision,'Win/lose':Win_or_lose}
     
     Zokon_lane = None
     zokon_team_id = None
@@ -23,39 +24,47 @@ def Find_info_about_zokon(game_id,game_index):
     
     winrates = []
     for i in range(len(Teammate_puuids)):
-                winrates.append([Teammate_puuids[i][0],0])   
+                winrates.append([Teammate_puuids[i][0],0,0])   
         
        
-    #print(winrates)
+    print(winrates)
     
-    def Zokon_game_info():
-        #print('LEFUTOTT BAZZZZEEEEEGGGGG')
-        nonlocal Zokon_lane, zokon_team_id
-        if game['info']['gameMode'] == 'CLASSIC':
-            for i in range(10):
-                if game['info']['participants'][i]['puuid'] == Zokon_puuid:
-                    Zokon_and_opponent_id['Zokon'] = i
-                    Zokon_lane = game['info']['participants'][i]['individualPosition']
-                    zokon_team_id = game['info']['participants'][i]['teamId']
-                    break
-            for i in range(10):
-                if game['info']['participants'][i]['individualPosition'] == Zokon_lane and zokon_team_id != game['info']['participants'][i]['teamId']:
-                    Zokon_and_opponent_id['Zokon_opponent'] = i
-                    Zokon_and_opponent_champ['Zokon'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['championName']
-                    Zokon_and_opponent_champ['Zokon_opponent'] = game['info']['participants'][Zokon_and_opponent_id['Zokon_opponent']]['championName']
-                    Zokon_kills_and_deaths['Kill'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['kills']
-                    Zokon_kills_and_deaths['Death'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['deaths']
-                    Zokon_and_opponent_gold['Zokon'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['goldEarned']
-                    Zokon_and_opponent_gold['Zokon_opponent'] = game['info']['participants'][Zokon_and_opponent_id['Zokon_opponent']]['goldEarned']
-                    Zokon_and_opponent_level['Zokon'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['champLevel']
-                    Zokon_and_opponent_level['Zokon_opponent'] = game['info']['participants'][Zokon_and_opponent_id['Zokon_opponent']]['champLevel']
-                    Zokon_vision['Zokon'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['visionScore']
-                    break   
+    #print('LEFUTOTT BAZZZZEEEEEGGGGG')
+    if game['info']['gameMode'] == 'CLASSIC':
+        for i in range(10):
+            if game['info']['participants'][i]['puuid'] == Zokon_puuid:
+                Zokon_and_opponent_id['Zokon'] = i
+                Zokon_lane = game['info']['participants'][i]['individualPosition']
+                zokon_team_id = game['info']['participants'][i]['teamId']
+                break
+        for i in range(10):
+            if game['info']['participants'][i]['individualPosition'] == Zokon_lane and zokon_team_id != game['info']['participants'][i]['teamId']:
+                Zokon_and_opponent_id['Zokon_opponent'] = i
+                Zokon_and_opponent_champ['Zokon'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['championName']
+                Zokon_and_opponent_champ['Zokon_opponent'] = game['info']['participants'][Zokon_and_opponent_id['Zokon_opponent']]['championName']
+                Zokon_kills_and_deaths['Kill'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['kills']
+                Zokon_kills_and_deaths['Death'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['deaths']
+                Zokon_and_opponent_gold['Zokon'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['goldEarned']
+                Zokon_and_opponent_gold['Zokon_opponent'] = game['info']['participants'][Zokon_and_opponent_id['Zokon_opponent']]['goldEarned']
+                Zokon_and_opponent_level['Zokon'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['champLevel']
+                Zokon_and_opponent_level['Zokon_opponent'] = game['info']['participants'][Zokon_and_opponent_id['Zokon_opponent']]['champLevel']
+                Zokon_vision['Zokon'] = game['info']['participants'][Zokon_and_opponent_id['Zokon']]['visionScore']
                 
-    Zokon_game_info()
+            for j in range(len(Teammate_puuids)):
+                if game['info']['participants'][i]['puuid'] == Teammate_puuids[j][1]:
+                    print(Teammate_puuids[j][0])
+                    if game['info']['participants'][i]['win'] == True:
+                        Win_or_lose['Zokon'] = 'Win'
+                        winrates[j][1] += 1
+                    else:
+                        Win_or_lose['Zokon'] = 'Lose'
+                        winrates[j][2] += 1
+                            
+    print(winrates)
+    
     if Zokon_and_opponent_id['Zokon'] is not None:
         #return Zokon_and_opponent_champ,Zokon_kills_and_deaths,Zokon_and_opponent_gold,Zokon_and_opponent_level
-        return Infos
+        return {'Infos_about_zokon_and_lane_opponent':Infos}
 def Zokon_bully():
     number_of_matches = 10
     try:
@@ -63,7 +72,7 @@ def Zokon_bully():
         
         lst_zokon_and_lane_opponent = []
         for i in range(number_of_matches):
-            info = Find_info_about_zokon(games[i],i)
+            info = Find_info_about_zokon(games[i],i)['Infos_about_zokon_and_lane_opponent']
             
             if info is not None:
                 lst_zokon_and_lane_opponent.append(info)
