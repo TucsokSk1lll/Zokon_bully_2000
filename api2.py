@@ -2,7 +2,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import discord_bot_token
-
+import api_key
+print(f"API key = {api_key.api_key}")
 # Enable all required intents
 intents = discord.Intents.default()
 
@@ -31,7 +32,7 @@ async def on_ready():
 @app_commands.describe(numberofgames="This is a useless parameter")
 async def alma(interaction: discord.Interaction, numberofgames: int):
     import requests
-    import api_key
+    
 
     Zokon_puuid = 'DbjcFQpoiF_-F6FriNwcW2eLOMUwvpatv2if1W3JnEq3DZiYfylB9bzpzTuTVSIXHndatE0ag7Ecow'
 
@@ -140,8 +141,8 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
                     await interaction.response.send_message(f'{i+1}/{number_of_matches} games checked (did not meet game requirements; most likely cuz some stupid gamemode)')
                 except:
                     await interaction.followup.send(f'{i+1}/{number_of_matches} games checked (did not meet game requirements; most likely cuz some stupid gamemode)')
-        for i in range(len(lst_zokon_and_lane_opponent)):
-            pass
+        #for i in range(len(lst_zokon_and_lane_opponent)):
+            #pass
             #await interaction.followup.send(lst_zokon_and_lane_opponent[i])
         for i in range(len(Winrates)):
             if Winrates[i][1]+Winrates[i][2] > 0:
