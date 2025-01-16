@@ -4,22 +4,17 @@ from discord import app_commands
 import discord_bot_token
 import api_key
 print(f"API key = {api_key.api_key}")
-# Enable all required intents
 intents = discord.Intents.default()
 
-# Initialize the bot
 client = commands.Bot(command_prefix='!', intents=intents)
 
-# Replace with your guild (server) ID
-GUILD_ID = 881507710993063936  # Replace this with your actual guild ID
+GUILD_ID = 881507710993063936
 
 
-# Define the bot's slash command tree
 @client.event
 async def on_ready():
     print(f'Bot is ready. Logged in as {client.user}')
     try:
-        # Sync commands for the specific guild
         guild = discord.Object(id=GUILD_ID)
         synced = await client.tree.sync(guild=guild)
         print(f"Synced {len(synced)} command(s) to guild {GUILD_ID}.")
@@ -27,12 +22,10 @@ async def on_ready():
         print(f"Error syncing commands: {e}")
 
 
-# Define a slash command (guild-specific)
 @client.tree.command(name="zokon_bully_simulator", description="Ohhh YEAAAHHH", guild=discord.Object(id=GUILD_ID))
 @app_commands.describe(numberofgames="This is a useless parameter")
 async def alma(interaction: discord.Interaction, numberofgames: int):
     import requests
-    
 
     Zokon_puuid = 'DbjcFQpoiF_-F6FriNwcW2eLOMUwvpatv2if1W3JnEq3DZiYfylB9bzpzTuTVSIXHndatE0ag7Ecow'
 
@@ -110,7 +103,7 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
     try:
         games = requests.get(f'https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{Zokon_puuid}/ids?start=0&count={number_of_matches}&api_key={api_key.api_key}').json()
         
-        lst_zokon_and_lane_opponent = []
+        lst_zokon_and_lane_opponent = {}
         Winrates = []
         for i in range(number_of_matches):
             The_whole_function = Find_info_about_zokon(games[i],i)
@@ -129,7 +122,7 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
                             Winrates[j][2] += 1
 
             
-                lst_zokon_and_lane_opponent.append(info)
+                lst_zokon_and_lane_opponent.update(info)
                 try:
                     await interaction.response.send_message(f'{i+1}/{number_of_matches} games checked')
                 except:
