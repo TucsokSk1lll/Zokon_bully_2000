@@ -120,20 +120,24 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
                             Winrates[j][1] += 1
                         elif Wins_and_Loses[j][2] == 1:
                             Winrates[j][2] += 1
-
-            
-                lst_zokon_and_lane_opponent.update(info)
+                            
+                lst_zokon_and_lane_opponent.update({i:info})
                 try:
-                    await interaction.response.send_message(f'{i+1}/{number_of_matches} games checked')
+                    print((i+1)%5,i+1)
+                    if (i+1)%5 == 0 or i+1 == number_of_matches:
+                        await interaction.response.send_message(f'{i+1}/{number_of_matches} games checked')
                 except:
-                    await interaction.followup.send(f'{i+1}/{number_of_matches} games checked')
+                    if (i+1)%5 == 0 or i+1 == number_of_matches:
+                        await interaction.followup.send(f'{i+1}/{number_of_matches} games checked')
             elif The_whole_function == 429:
                 pass
             else:
                 try:
-                    await interaction.response.send_message(f'{i+1}/{number_of_matches} games checked (did not meet game requirements; most likely cuz some stupid gamemode)')
+                    if (i+1)%5 == 0 or i+1 == number_of_matches:
+                        await interaction.response.send_message(f'{i+1}/{number_of_matches} games checked')
                 except:
-                    await interaction.followup.send(f'{i+1}/{number_of_matches} games checked (did not meet game requirements; most likely cuz some stupid gamemode)')
+                    if (i+1)%5 == 0 or i+1 == number_of_matches:
+                        await interaction.followup.send(f'{i+1}/{number_of_matches} games checked')
         #for i in range(len(lst_zokon_and_lane_opponent)):
             #pass
             #await interaction.followup.send(lst_zokon_and_lane_opponent[i])
@@ -142,8 +146,8 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
                 Winrates[i].append(str((Winrates[i][1]/(Winrates[i][1]+Winrates[i][2]))*100)[0:5])
             else:
                 Winrates[i].append(None)
-        await interaction.followup.send(Winrates)
-        await interaction.followup.send(lst_zokon_and_lane_opponent)
+        #await interaction.followup.send(Winrates)
+        #await interaction.followup.send(lst_zokon_and_lane_opponent)
 
     except Exception as e:
         if games != None:
@@ -152,7 +156,14 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
             #await interaction.response.send_message(games['status']['message'] , '(' , games['status']['status_code'], ')')
         else:
             await interaction.followup.send('idk what the fuck went wrong')
-                
-
+    print(lst_zokon_and_lane_opponent)         
+    for i in range(len(lst_zokon_and_lane_opponent)):
+        try:
+            print(lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill'],lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'])
+            if lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'] != 0:
+                if lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill']/lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'] < 0.5:
+                    await interaction.followup.send(f'Zokonnak {lst_zokon_and_lane_opponent[i]['Zokon_and_opponent_champ']['Zokon']} champel {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill']} killje és {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death']} halála volt.')
+        except:
+            pass
 
 client.run(discord_bot_token.discord_bot_token)
