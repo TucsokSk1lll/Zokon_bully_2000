@@ -59,9 +59,10 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
         
         #print('LEFUTOTT BAZZZZEEEEEGGGGG')
         #print(game)
-        if game == {'status': {'message': 'Rate limit exceeded', 'status_code': 429}}:
+        if 'status' in game:
             print(str(game['status']['message']) + '(' + str(game['status']['status_code'])+ ')')
             return game['status']['status_code']
+        
         else:
             if game['info']['gameMode'] == 'CLASSIC':
                 for i in range(10):
@@ -105,8 +106,10 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
                 
         lst_zokon_and_lane_opponent = {}
         Winrates = []
+        print(games)
         for i in range(number_of_matches):
             The_whole_function = Find_info_about_zokon(games[i],i)
+            print(The_whole_function)
             #print(The_whole_function,games[i],i)
             if The_whole_function is not None and isinstance(The_whole_function,dict) == True:
                 info = The_whole_function['Infos_about_zokon_and_lane_opponent']
@@ -148,15 +151,15 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
                 Winrates[i].append(None)
         #await interaction.followup.send(Winrates)
         #await interaction.followup.send(lst_zokon_and_lane_opponent)
-
     except Exception as e:
         if games != None:
             await interaction.followup.send(e)
             print(e)
+            print('ok')
             #await interaction.response.send_message(games['status']['message'] , '(' , games['status']['status_code'], ')')
         else:
             await interaction.followup.send('idk what the fuck went wrong')
-    print(lst_zokon_and_lane_opponent)         
+    print(lst_zokon_and_lane_opponent)        
     for i in range(len(lst_zokon_and_lane_opponent)):
         try:
             print(lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill'],lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'])
