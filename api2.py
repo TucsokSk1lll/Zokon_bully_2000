@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord import app_commands
 import discord_bot_token
 import api_key
-print(f"API key = {api_key.api_key}")
+print(f'API key = {api_key.api_key}')
 intents = discord.Intents.default()
 
 client = commands.Bot(command_prefix='!', intents=intents)
@@ -17,13 +17,13 @@ async def on_ready():
     try:
         guild = discord.Object(id=GUILD_ID)
         synced = await client.tree.sync(guild=guild)
-        print(f"Synced {len(synced)} command(s) to guild {GUILD_ID}.")
+        print(f'Synced {len(synced)} command(s) to guild {GUILD_ID}.')
     except Exception as e:
-        print(f"Error syncing commands: {e}")
+        print(f'Error syncing commands: {e}')
 
 
-@client.tree.command(name="zokon_bully_simulator", description="Ohhh YEAAAHHH", guild=discord.Object(id=GUILD_ID))
-@app_commands.describe(numberofgames="This is a useless parameter")
+@client.tree.command(name='zokon_bully_simulator', description='Ohhh YEAAAHHH', guild=discord.Object(id=GUILD_ID))
+@app_commands.describe(numberofgames='This is a useless parameter')
 async def alma(interaction: discord.Interaction, numberofgames: int):
     import requests
 
@@ -102,13 +102,13 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
     number_of_matches = numberofgames
     try:
         games = requests.get(f'https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{Zokon_puuid}/ids?start=0&count={number_of_matches}&api_key={api_key.api_key}').json()
-        
+                
         lst_zokon_and_lane_opponent = {}
         Winrates = []
         for i in range(number_of_matches):
             The_whole_function = Find_info_about_zokon(games[i],i)
             #print(The_whole_function,games[i],i)
-            if The_whole_function is not None and isinstance(The_whole_function,dict) == True :
+            if The_whole_function is not None and isinstance(The_whole_function,dict) == True:
                 info = The_whole_function['Infos_about_zokon_and_lane_opponent']
                 Wins_and_Loses = The_whole_function['Winrates']
                 
@@ -162,7 +162,7 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
             print(lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill'],lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'])
             if lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'] != 0:
                 if lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill']/lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'] < 0.5:
-                    await interaction.followup.send(f'Zokonnak {lst_zokon_and_lane_opponent[i]['Zokon_and_opponent_champ']['Zokon']} champel {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill']} killje és {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death']} halála volt.')
+                    await interaction.followup.send(f"Zokonnak {lst_zokon_and_lane_opponent[i]['Zokon_and_opponent_champ']['Zokon']} champel {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill']} killje és {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death']} halála volt.)
         except:
             pass
 
