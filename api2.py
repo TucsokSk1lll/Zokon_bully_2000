@@ -60,7 +60,7 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
         #print('LEFUTOTT BAZZZZEEEEEGGGGG')
         #print(game)
         if 'status' in game:
-            print(str(game['status']['message']) + '(' + str(game['status']['status_code'])+ ')')
+            print(str(game['status']['message']) + '(' + str(game['status']['status_code']) + ')')
             return game['status']['status_code']
         
         else:
@@ -155,7 +155,6 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
         if games != None:
             await interaction.followup.send(e)
             print(e)
-            print('ok')
             #await interaction.response.send_message(games['status']['message'] , '(' , games['status']['status_code'], ')')
         else:
             await interaction.followup.send('idk what the fuck went wrong')
@@ -165,7 +164,7 @@ async def alma(interaction: discord.Interaction, numberofgames: int):
             print(lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill'],lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'])
             if lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'] != 0:
                 if lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill']/lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death'] < 0.5:
-                    await interaction.followup.send(f"Zokonnak {lst_zokon_and_lane_opponent[i]['Zokon_and_opponent_champ']['Zokon']} champel {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill']} killje és {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death']} halála volt.")
+                    await interaction.followup.send(f'Zokonnak {lst_zokon_and_lane_opponent[i]['Zokon_and_opponent_champ']['Zokon']} champel {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Kill']} killje és {lst_zokon_and_lane_opponent[i]['Zokon_kills_and_deaths']['Death']} halála volt.')
         except:
             pass
 
